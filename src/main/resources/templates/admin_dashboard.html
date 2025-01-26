@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container my-4">
+        <h1 class="text-center mb-4">Admin Dashboard</h1>
+
+        <div th:replace="~{fragments/dashboard_navbar :: d_navbar}"></div>
+        <div th:if="${sMsg}" class="alert alert-success">
+            <span th:text="${sMsg}"></span>
+        </div>
+        <div th:if="${eMsg}" class="alert alert-danger">
+            <span th:text="${eMsg}"></span>
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Blood Group</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="donor : ${donors}">
+                    <td th:text="${donor.id}"></td>
+                    <td th:text="${donor.name}"></td>
+                    <td th:text="${donor.email}"></td>
+                    <td th:text="${donor.bloodGroup}"></td>
+                    <td>
+                        <span th:classappend="${donor.enabled ? 'badge bg-success' : 'badge bg-danger'}" 
+                              th:text="${donor.enabled ? 'Active' : 'Blocked'}"></span>
+                    </td>
+                    <td>
+                        <div class="d-flex gap-2">
+                            <a th:href="@{/admin/donors/{id}/edit(id=${donor.id})}" class="btn btn-sm btn-primary">
+                                Edit
+                            </a>
+                            <form th:action="@{/admin/donors/{id}/block(id=${donor.id})}" method="post">
+                                <button type="submit" th:if="${donor.enabled}" class="btn btn-sm btn-warning">
+                                    Block
+                                </button>
+                            </form>
+                            <form th:action="@{/admin/donors/{id}/unblock(id=${donor.id})}" method="post">
+                                <button type="submit" th:if="${!donor.enabled}" class="btn btn-sm btn-success">
+                                    Unblock
+                                </button>
+                            </form>
+                            <form th:action="@{/admin/donors/{id}/delete(id=${donor.id})}" method="post">
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

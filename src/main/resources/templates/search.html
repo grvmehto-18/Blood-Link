@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🩸Blood Bank Management System</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="main">
+
+        <div class="firstdiv">
+           <h1>Blood Bank Management System</h1>
+        </div>
+        <div class="seconddiv" th:replace="~{fragments/header :: header}">
+        </div>
+
+        <div class="thirddiv" >
+            <img th:src="@{/images/blood box.png}" height="350px"   width="100%;">
+        </div>
+
+        <form th:action="@{/search/search}" method="get">
+            <div class="fourdiv" style="margin: 20px auto; padding: 20px 240px padding-left:50px" >
+                <select id="group" name="bloodGroup" required style="width: 20%;">
+                    Select the blood group
+                    <option value="A+"><b>A+</b></option>
+                    <option value="A-"><b>A-</b></option>
+                    <option value="B+"><b>B+</b></option>
+                    <option value="B-"><b>B-</b></option>
+                    <option value="AB+"><b>AB+</b></option>
+                    <option value="AB-"><b>AB-</b></option>
+                    <option value="O+"><b>O+</b></option>
+                    <option value="O-"><b>O-</b></option>
+                    <option value="HH"><b>HH (Bombay blood group)</b></option>
+                </select>
+
+                <input style="width: 20%;" class="need" type="text" name="address" placeholder="Where do you need? e.g., bholaram" required>
+            </div>
+
+            <div class="center">
+                <button type="submit">Search</button>
+            </div>
+         </form>
