@@ -1,43 +1,41 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🩸Blood Bank Management System</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Search Donors - Blood Bank Management System</title>
 </head>
 <body>
-    <div class="main">
-
-        <div class="firstdiv">
-           <h1>Blood Bank Management System</h1>
-        </div>
-        <div class="seconddiv" th:replace="~{fragments/header :: header}">
+    <div th:fragment="content" class="container mx-auto px-4 py-8">
+        <div class="text-center mb-8">
+            <img th:src="@{/images/blood box.png}" class="mx-auto w-full max-w-2xl h-auto object-cover rounded-lg shadow-md">
         </div>
 
-        <div class="thirddiv" >
-            <img th:src="@{/images/blood box.png}" height="350px"   width="100%;">
-        </div>
-
-        <form th:action="@{/search/search}" method="get">
-            <div class="fourdiv" style="margin: 20px auto; padding: 20px 240px padding-left:50px" >
-                <select id="group" name="bloodGroup" required style="width: 20%;">
-                    Select the blood group
-                    <option value="A+"><b>A+</b></option>
-                    <option value="A-"><b>A-</b></option>
-                    <option value="B+"><b>B+</b></option>
-                    <option value="B-"><b>B-</b></option>
-                    <option value="AB+"><b>AB+</b></option>
-                    <option value="AB-"><b>AB-</b></option>
-                    <option value="O+"><b>O+</b></option>
-                    <option value="O-"><b>O-</b></option>
-                    <option value="HH"><b>HH (Bombay blood group)</b></option>
+        <form th:action="@{/search/search}" method="get" class="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-md space-y-6">
+            <h2 class="text-2xl font-bold text-center text-red-600">Find Blood Donors</h2>
+            <div>
+                <label for="bloodGroup" class="block text-sm font-medium text-gray-700">Select Blood Group:</label>
+                <select id="bloodGroup" name="bloodGroup" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required>
+                    <option value="">Select a blood group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="HH">HH (Bombay blood group)</option>
                 </select>
-
-                <input style="width: 20%;" class="need" type="text" name="address" placeholder="Where do you need? e.g., bholaram" required>
             </div>
 
-            <div class="center">
-                <button type="submit">Search</button>
+            <div>
+                <label for="address" class="block text-sm font-medium text-gray-700">Location:</label>
+                <input type="text" id="address" name="address" placeholder="Where do you need? e.g., Indore" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required>
             </div>
-         </form>
+
+            <div class="text-center">
+                <button type="submit" class="w-full px-4 py-2 font-medium text-white bg-red-500 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Search</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

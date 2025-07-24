@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
+<head>
+    <title>Donation History for <span th:text="${donor.fullName}"></span></title>
+</head>
+<body>
+    <div th:fragment="content" class="container mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold text-red-600 mb-6 text-center">Donation History for <span th:text="${donor.fullName}"></span></h2>
+
+        <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">Donor Eligibility:</h3>
+            <p th:if="${eligible}" class="text-green-600 font-bold">Eligible to donate!</p>
+            <p th:unless="${eligible}" class="text-red-600 font-bold">Not yet eligible to donate. Please check back later.</p>
+        </div>
+
+        <div th:if="${#lists.isEmpty(donations)}" class="bg-white shadow-md rounded-lg p-6 text-center text-gray-600">
+            <p>No donation records found for this donor.</p>
+        </div>
+
+        <div th:unless="${#lists.isEmpty(donations)}" class="overflow-x-auto bg-white shadow-md rounded-lg">
+            <table class="min-w-full leading-normal">
+                <thead>
+                    <tr>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Donation ID</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Blood Group</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Quantity (ml)</th>
+                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="donation : ${donations}" class="hover:bg-gray-50">
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm" th:text="${donation.id}"></td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm" th:text="${#temporals.format(donation.donationDate, 'yyyy-MM-dd')}"></td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm" th:text="${donation.bloodGroup}"></td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm" th:text="${donation.quantityMl}"></td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm" th:text="${donation.location}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-6 text-center">
+            <a th:href="@{/donor/dashboard}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-300">Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

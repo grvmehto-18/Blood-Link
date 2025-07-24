@@ -30,6 +30,6 @@ import java.util.List;
                                    @RequestParam("address") String location, Model model) {
             List<Donor> donors = donorService.searchDonors(bloodGroup, location);
             model.addAttribute("donors", donors);
-            return "searchResult";
+            return "search_result";
         }
     }

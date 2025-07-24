@@ -6,6 +6,7 @@ import com.blood.bank.Blood.bank.Repository.DonorRepository;
 import com.blood.bank.Blood.bank.model.Donor;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DonorService {
@@ -43,7 +44,7 @@ public class DonorService {
 
 
     public List<Donor> searchDonors(String bloodGroup, String location) {
-        return donorRepository.findByBloodGroupAndAddress(bloodGroup, location);
+        return donorRepository.findByBloodGroupAndAddressContainingIgnoreCase(bloodGroup, location);
     }
 
     public List<Donor> getAllDonors() {
@@ -66,8 +67,10 @@ public class DonorService {
         donorRepository.deleteById(id);
     }
 
-    public Donor getDonorById(Long id) {
-        return donorRepository.findById(id).orElseThrow(() -> new RuntimeException("Donor not found"));
+
+
+    public Optional<Donor> getDonorById(Long id) {
+        return donorRepository.findById(id);
     }
 
     public void updateDonor(Long id, Donor updatedDonor) {
@@ -75,6 +78,7 @@ public class DonorService {
         donor.setFullName(updatedDonor.getFullName());
         donor.setEmail(updatedDonor.getEmail());
         donor.setBloodGroup(updatedDonor.getBloodGroup());
+        donor.setAddress(updatedDonor.getAddress());
         donorRepository.save(donor);
     }
 

@@ -14,10 +14,11 @@ public interface DonorRepository extends JpaRepository<Donor, Long> {
 
    Optional<Donor> findByEmail(String email);
    Optional<Donor> findByVerificationCode(String verificationCode);
+   Optional<Donor> findByResetToken(String resetToken);
 
 
 //    List<Donor> findDonorByBloodGroupAndLocation(String bloodGroup,String city);
    public Donor findByPhoneNumber(String phoneNumber);
-   public List<Donor> findByBloodGroupAndAddress(String bloodGroup,String address);
+   public List<Donor> findByBloodGroupAndAddressContainingIgnoreCase(String bloodGroup,String address);
 }
 

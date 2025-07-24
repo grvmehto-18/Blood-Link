@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
+import com.blood.bank.Blood.bank.exception.InvalidVerificationCodeException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -64,28 +65,31 @@ public class AuthenticationService {
 
                 userRepository.save(user);
             }else{
-                throw new RuntimeException("Invalid verification code");
+                throw new InvalidVerificationCodeException("Invalid Verification Code");
             }
         }else{
-            throw new RuntimeException("User Not found");
+            throw new InvalidVerificationCodeException("User Not Found");
         }
     }
 
     public void resendVerificationCode(String email){
+        if(email.isBlank()){
+            throw new InvalidVerificationCodeException("Email cannot be empty");
+        }
         Optional<Donor> optionalUser = userRepository.findByEmail(email);
         if(optionalUser.isPresent()){
             Donor user = optionalUser.get();
             if(user.isEnabled()){
-                throw new RuntimeException("User is verified");
+                throw new InvalidVerificationCodeException("User is already verified");
             }
 
             user.setVerificationCode(generateVerificationCode());
-            user.setTime(LocalDateTime.now().plusHours(1));
+            user.setTime(LocalDateTime.now().plusMinutes(15));
 
             sendVerificationEmail(user);
             userRepository.save(user);
         }else{
-            throw new RuntimeException("User Not Found");
+            throw new InvalidVerificationCodeException("User Not Found");
         }
     }
 

@@ -1,6 +1,9 @@
 package com.blood.bank.Blood.bank.controller;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,12 +13,15 @@ import com.blood.bank.Blood.bank.model.Donor;
 import com.blood.bank.Blood.bank.service.DonorService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin")
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
     private final DonorService donorService;
+    private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
     public AdminController(DonorService donorService) {
         this.donorService = donorService;
@@ -31,14 +37,14 @@ public class AdminController {
 
     // Block a donor
     @PostMapping("/donors/{id}/block")
-    public String blockDonor(@PathVariable Long id, Model model) {
+    public String blockDonor(@PathVariable Long id) {
         donorService.blockDonor(id);
         return RedirectionAndReturn.ADMIN_DASHBOARD_RED;
     }
 
     // Unblock a donor
     @PostMapping("/donors/{id}/unblock")
-    public String unblockDonor(@PathVariable Long id, Model model) {
+    public String unblockDonor(@PathVariable Long id) {
         donorService.unblockDonor(id);
         return RedirectionAndReturn.ADMIN_DASHBOARD_RED;
         
@@ -46,14 +52,14 @@ public class AdminController {
 
     // Delete a donor
     @PostMapping("/donors/{id}/delete")
-    public String deleteDonor(@PathVariable Long id, Model model) {
+    public String deleteDonor(@PathVariable Long id) {
         donorService.deleteDonor(id);
         return RedirectionAndReturn.ADMIN_DASHBOARD_RED;
     }
 
     @GetMapping("/donors/{id}/edit")
     public String editDonor(@PathVariable Long id, Model model) {
-        Donor donor = donorService.getDonorById(id);
+        Donor donor = donorService.getDonorById(id).orElse(null);
         model.addAttribute("donor", donor);
         return "editdonor"; 
     }
@@ -68,7 +74,7 @@ public class AdminController {
             
 
         }catch(Exception e){
-            e.printStackTrace();
+            logger.error("Error updating donor with id: {}", id, e);
             redirectAttributes.addFlashAttribute("eMsg","Donor Updation Failed");
             return RedirectionAndReturn.ADMIN_DASHBOARD_RED;
             

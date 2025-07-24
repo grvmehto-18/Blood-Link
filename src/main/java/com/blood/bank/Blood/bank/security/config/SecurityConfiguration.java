@@ -1,19 +1,18 @@
 package com.blood.bank.Blood.bank.security.config;
 
 import java.util.List;
-
+import com.blood.bank.Blood.bank.security.config.handler.FailureHandler;
+import com.blood.bank.Blood.bank.security.config.handler.SuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import com.blood.bank.Blood.bank.security.handler.SuccessHandler;
-
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -21,6 +20,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
+
+    private final SuccessHandler successHandler;
+    private final FailureHandler failureHandler;
 
 
     @Bean
@@ -30,7 +32,7 @@ public class SecurityConfiguration {
                     .csrf(csrf -> csrf.disable())
                     .authorizeHttpRequests(authorize -> {
                         authorize
-                                .requestMatchers("/", "/auth/**", "/search/**","/blood/**", "/css/**","/images/**")
+                                .requestMatchers("/", "/auth/**", "/search/**","/blood/**", "/images/**","/css/**","/js/**","/auth/forgot-password", "/auth/reset-password")
                                 .permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/donor/**").hasAnyRole("USER","ADMIN")
@@ -40,12 +42,17 @@ public class SecurityConfiguration {
                     })
                     .formLogin(
                         formLogin -> formLogin.loginPage("/login")
-                                               .successHandler(new SuccessHandler())
-                                               .permitAll()
+                                               .successHandler(successHandler)
+                                               .failureHandler(failureHandler)
                     );
                    
                     
         return httpSecurity.build();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers("/css/**", "/js/**", "/images/**");
     }
 
     @Bean

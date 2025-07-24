@@ -1,28 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🩸 Blood Bank Management System</title>
-    <link rel="stylesheet" th:href="@{/css/Style1.css}">
+    <title>Admin Login - Blood Bank Management System</title>
 </head>
+<body class="bg-gray-100">
+    <div th:fragment="content" class="flex items-center justify-center min-h-screen">
+        <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+            <h1 class="text-2xl font-bold text-center text-red-500">Admin Login</h1>
 
-<body>
-    <div class="admin">
-        <form action="#" method="POST">
-            <div class="admin-header">
-                <h1>Admin Login</h1>
-            </div>
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            <form th:action="@{/login}" method="post" class="space-y-6">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700">Username:</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required>
+                </div>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password" required><br>
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password:</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required>
+                </div>
 
-            <button type="submit">Submit</button>
-        </form>
+                <button type="submit" class="w-full px-4 py-2 font-medium text-white bg-red-500 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Login</button>
+            </form>
+        </div>
     </div>
 </body>
-
 </html>

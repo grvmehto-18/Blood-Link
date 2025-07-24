@@ -1,137 +1,24 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🩸Blood Bank Management System</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Custom CSS -->
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f9f9f9;
-            margin-top: 50px;
-        }
-
-        /* Navbar */
-        .navbar {
-            background-color: #db3e42;
-            padding: 15px 30px;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .navbar a {
-            color: white !important;
-            font-size: 1.1rem;
-            padding: 10px 20px;
-            text-decoration: none;
-        }
-
-        .navbar a:hover {
-            background-color: #c62d36;
-            border-radius: 5px;
-        }
-
-        /* Contact Us Section */
-        .contact-card {
-            background-color: #ffffff;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-top: 50px;
-            max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
-            font-size: 1.1rem;
-        }
-
-        .contact-header {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .contact-info p {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            line-height: 1.8;
-        }
-
-        .contact-info i {
-            color: #db3e42;
-            margin-right: 15px;
-        }
-
-        .footer {
-            background-color: #343a40;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            position: relative;
-            bottom: 0;
-            width: 100%;
-        }
-
-        /* Container */
-        .container {
-            padding: 0 40px;
-        }
-
-        /* Card Header */
-        .card-header {
-            font-weight: bold;
-            color: #db3e42;
-            font-size: 1.5rem;
-        }
-
-        /* Mobile Responsiveness */
-        @media (max-width: 768px) {
-            .contact-card {
-                padding: 25px;
-            }
-
-            .navbar {
-                padding: 10px 15px;
-            }
-
-            .navbar a {
-                font-size: 1rem;
-                padding: 8px 15px;
-            }
-
-            .contact-header {
-                font-size: 2rem;
-            }
-        }
-    </style>
+    <title>Contact Us - Blood Bank Management System</title>
 </head>
 <body>
+    <div th:fragment="content" class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+            <h2 class="text-4xl font-bold text-red-600 text-center mb-4">Contact Us</h2>
+            <p class="text-xl text-gray-700 text-center mb-2">Anybody Can Give Blood.</p>
+            <p class="text-lg text-gray-600 text-center italic mb-8">"Tears of A Mother Cannot Save Her Child. But Your Blood Can."</p>
 
-<!-- Navbar Fragment -->
-<div th:replace="~{fragments/header}"></div>
-
-<div class="container">
-    <div class="contact-card">
-        <h2 class="contact-header">Contact Us</h2>
-        <p class="lead">Anybody Can Give Blood.</p>
-        <p class="blockquote-footer">"Tears of A Mother Cannot Save Her Child. But Your Blood Can."</p>
-
-        <div class="contact-info">
-            <p><i class="fa-solid fa-location-dot"></i> <strong>Address:</strong> 14, A B Road, MIG Main Road, Donor Technologies Pvt Ltd, Indore, Madhya Pradesh - 452011, India</p>
-            <p><i class="fa-solid fa-phone-volume"></i> <strong>Phone Number:</strong> +919963587220</p>
+            <div class="contact-info space-y-4 text-lg text-gray-800">
+                <p class="flex items-center"><i class="fa-solid fa-location-dot text-red-500 mr-3"></i> <strong>Address:</strong> 14, A B Road, MIG Main Road, Donor Technologies Pvt Ltd, Indore, Madhya Pradesh - 452011, India</p>
+                <p class="flex items-center"><i class="fa-solid fa-phone-volume text-red-500 mr-3"></i> <strong>Phone Number:</strong> +919963587220</p>
+            </div>
         </div>
+
+        <footer class="bg-red-600 text-white text-center p-4 rounded-lg shadow-lg">
+            <p class="text-sm">&copy; 2024 healthFROG. All rights reserved.</p>
+        </footer>
     </div>
-</div>
-
-<footer class="footer">
-    <p class="mb-0">Copyright © 2024 healthFROG. All rights reserved.</p>
-</footer>
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>

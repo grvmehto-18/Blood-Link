@@ -13,7 +13,7 @@ import com.blood.bank.Blood.bank.model.Donor;
 public class HomeController {
 
     @GetMapping("/admin")
-    public String loginPage(){
+    public String adminPage(){
         return "admin";
     }
 
@@ -36,13 +36,13 @@ public class HomeController {
     }
 
     @GetMapping("/verify")
-    public String getVerificationPage(Model model) {
-        String email = (String)model.getAttribute("email");
-        if(email == null){
-            model.addAttribute("eMsg","Email is missing. Please enter your email then submit the verification code");
-            return "verify";
-        }
+    public String getVerificationPage() {
         return "verify"; // Show the verification form
+    }
+
+    @GetMapping("/camp")
+    public String campPage() {
+        return "blood_camp_list";
     }
 
 

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
+<head>
+    <title>Search Results - Blood Bank Management System</title>
+</head>
+<body>
+    <div th:fragment="content" class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center text-red-600 mb-8">Search Results</h1>
+
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <h2 class="text-2xl font-semibold text-gray-800 p-6 border-b">Available Donors</h2>
+            <div th:if="${#lists.isEmpty(donors)}" class="p-6 text-center text-gray-600">
+                <p>No donors found matching your criteria.</p>
+            </div>
+            <div th:unless="${#lists.isEmpty(donors)}" class="overflow-x-auto">
+                <table class="min-w-full leading-normal">
+                    <thead>
+                        <tr>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Name</th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Blood Group</th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Phone Number</th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Location</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="donor : ${donors}" class="hover:bg-gray-50">
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm" th:text="${donor.fullName}"></td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm" th:text="${donor.bloodGroup}"></td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <a th:href="'tel:' + ${donor.phoneNumber}" th:text="${donor.phoneNumber}" class="text-blue-600 hover:underline"></a>
+                            </td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm" th:text="${donor.address}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

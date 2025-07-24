@@ -1,16 +1,45 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<body>
-    <div class="seconddiv" th:fragment="header">
-            <img th:src="@{/images/hand-holding-a-drop-of-blood-world-blood-donor-day-blood-donation-illustration-donor-symbol-blood-donation-symbol-free-png.webp}" width="70px" >
-            <a href="/"><b>Home</b></a>
-            <a href="/search/searchPage"><b>Search</b></a>
-            <a href="#"><b>Live Blood Camp</b></a>
-            <a href="/blood/regiPage"><b>Donor Register</b></a>
-            <a href="/login"><b>Login</b></a>
-            <a href="/blood/contactUs"><b>Contact Us</b></a>
-            <a href="/blood/about"><b>About US</b></a>
+<header class="bg-white shadow-md" th:fragment="header">
+    <nav class="container mx-auto px-6 py-3">
+        <div class="flex items-center justify-between">
+            <div class="text-xl font-semibold text-gray-700">
+                <a href="/" class="flex items-center">
+                    <img th:src="@{/images/hand-holding-a-drop-of-blood-world-blood-donor-day-blood-donation-illustration-donor-symbol-blood-donation-symbol-free-png.webp}" width="50" class="mr-2">
+                    <span class="text-red-500">Blood</span><span class="text-gray-700">Link</span>
+                </a>
+            </div>
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="/" class="text-gray-600 hover:text-red-500">Home</a>
+                <a href="/search/searchPage" class="text-gray-600 hover:text-red-500">Search</a>
+                <a href="/blood/camp" class="text-gray-600 hover:text-red-500">Live Blood Camp</a>
+                <a href="/blood/regiPage" class="text-gray-600 hover:text-red-500">Donor Register</a>
+                <a href="/login" class="text-gray-600 hover:text-red-500">Login</a>
+                <a href="/blood/contactUs" class="text-gray-600 hover:text-red-500">Contact Us</a>
+                <a href="/blood/about" class="text-gray-600 hover:text-red-500">About Us</a>
+            </div>
+            <div class="md:hidden flex items-center">
+                <button class="outline-none mobile-menu-button">
+                    <svg class="w-6 h-6 text-gray-500 hover:text-red-500" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                        <path d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="hidden mobile-menu">
+            <a href="/" class="block py-2 px-4 text-sm text-gray-700 hover:bg-red-500 hover:text-white">Home</a>
+            <a href="/search/searchPage" class="block py-2 px-4 text-sm text-gray-700 hover:bg-red-500 hover:text-white">Search</a>
+            <a href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-red-500 hover:text-white">Live Blood Camp</a>
+            <a href="/blood/regiPage" class="block py-2 px-4 text-sm text-gray-700 hover:bg-red-500 hover:text-white">Donor Register</a>
+            <a href="/login" class="block py-2 px-4 text-sm text-gray-700 hover:bg-red-500 hover:text-white">Login</a>
+            <a href="/blood/contactUs" class="block py-2 px-4 text-sm text-gray-700 hover:bg-red-500 hover:text-white">Contact Us</a>
+            <a href="/blood/about" class="block py-2 px-4 text-sm text-gray-700 hover:bg-red-500 hover:text-white">About Us</a>
+        </div>
+    </nav>
+    <script>
+        const btn = document.querySelector("button.mobile-menu-button");
+        const menu = document.querySelector(".mobile-menu");
 
-    </div>
-</body>
-</html>
+        btn.addEventListener("click", () => {
+            menu.classList.toggle("hidden");
+        });
+    </script>
+</header>
