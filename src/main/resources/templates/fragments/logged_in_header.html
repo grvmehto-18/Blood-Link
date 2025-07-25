@@ -17,7 +17,7 @@
                 <!-- Admin Links -->
                 <div sec:authorize="hasRole('ADMIN')" class="relative group">
                     <button class="text-white hover:text-gray-300 focus:outline-none">Manage</button>
-                    <ul class="absolute hidden group-hover:block bg-gray-700 text-white rounded-md shadow-lg mt-2 py-1 w-48 right-0">
+                    <ul class="absolute hidden bg-gray-700 text-white rounded-md shadow-lg mt-2 py-1 w-48 right-0">
                         <li><a th:href="@{/admin/dashboard}" class="block px-4 py-2 text-sm hover:bg-gray-600">Manage Donors</a></li>
                         <li><a th:href="@{/requests/all}" class="block px-4 py-2 text-sm hover:bg-gray-600">View Blood Requests</a></li>
                         <li><a th:href="@{/inventory/list}" class="block px-4 py-2 text-sm hover:bg-gray-600">Manage Inventory</a></li>
@@ -28,14 +28,14 @@
                 <!-- Donor Links -->
                 <div sec:authorize="hasAnyRole('DONOR', 'ADMIN')" class="relative group">
                     <button class="text-white hover:text-gray-300 focus:outline-none">Dashboard</button>
-                    <ul class="absolute hidden group-hover:block bg-gray-700 text-white rounded-md shadow-lg mt-2 py-1 w-48 right-0">
+                    <ul class="absolute hidden bg-gray-700 text-white rounded-md shadow-lg mt-2 py-1 w-48 right-0">
                         <li><a th:href="@{/donor/dashboard}" class="block px-4 py-2 text-sm hover:bg-gray-600">My Profile</a></li>
                         <li><a th:href="@{/donor/{id}/update(id=${#authentication.principal.id})}" class="block px-4 py-2 text-sm hover:bg-gray-600">Update Details</a></li>
                     </ul>
                 </div>
                 <div sec:authorize="hasAnyRole('DONOR','ADMIN')" class="relative group">
                     <button class="text-white hover:text-gray-300 focus:outline-none">Activity</button>
-                    <ul class="absolute hidden group-hover:block bg-gray-700 text-white rounded-md shadow-lg mt-2 py-1 w-48 right-0">
+                    <ul class="absolute hidden bg-gray-700 text-white rounded-md shadow-lg mt-2 py-1 w-48 right-0">
                         <li><a th:href="@{/requests/new}" class="block px-4 py-2 text-sm hover:bg-gray-600">Make a Blood Request</a></li>
                         <li><a th:href="@{/requests/my-requests}" class="block px-4 py-2 text-sm hover:bg-gray-600">View My Requests</a></li>
                         <li><a th:href="@{/donations/history/{id}(id=${#authentication.principal.id})}" class="block px-4 py-2 text-sm hover:bg-gray-600">View Donation History</a></li>
@@ -58,28 +58,62 @@
             <ul class="mt-4 space-y-2">
                 <li><a href="/" class="block px-4 py-2 text-sm hover:bg-gray-700">Home</a></li>
                 <!-- Admin Links -->
-                <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/dashboard}" class="block px-4 py-2 text-sm hover:bg-gray-700">Manage Donors</a></li>
+                <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/dashboard}" class="block px-4 py-2 text-sm hover:bg-gray-700">Admin Dashboard</a></li>
                 <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/requests/all}" class="block px-4 py-2 text-sm hover:bg-gray-700">View Blood Requests</a></li>
                 <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/inventory/list}" class="block px-4 py-2 text-sm hover:bg-gray-700">Manage Inventory</a></li>
                 <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/bloodcamps/list}" class="block px-4 py-2 text-sm hover:bg-gray-700">Manage Blood Camps</a></li>
                 <!-- Donor Links -->
-                <li sec:authorize="hasRole('DONOR')"><a th:href="@{/donor/dashboard}" class="block px-4 py-2 text-sm hover:bg-gray-700">My Profile</a></li>
-                <li sec:authorize="hasRole('DONOR')"><a th:href="@{/donor/{id}/update(id=${#authentication.principal.id})}" class="block px-4 py-2 text-sm hover:bg-gray-700">Update Details</a></li>
-                <li sec:authorize="hasRole('DONOR')"><a th:href="@{/requests/new}" class="block px-4 py-2 text-sm hover:bg-gray-700">Make a Blood Request</a></li>
-                <li sec:authorize="hasRole('DONOR')"><a th:href="@{/requests/my-requests}" class="block px-4 py-2 text-sm hover:bg-gray-700">View My Requests</a></li>
-                <li sec:authorize="hasRole('DONOR')"><a th:href="@{/donations/history/{id}(id=${#authentication.principal.id})}" class="block px-4 py-2 text-sm hover:bg-gray-700">View Donation History</a></li>
-                <li sec:authorize="hasRole('DONOR')"><a th:href="@{/search}" class="block px-4 py-2 text-sm hover:bg-gray-700">Search Donors</a></li>
-                <li sec:authorize="hasRole('DONOR')"><a th:href="@{/bloodcamps/list}" class="block px-4 py-2 text-sm hover:bg-gray-700">View Blood Camps</a></li>
+                <li sec:authorize="hasAnyRole('DONOR','ADMIN')"><a th:href="@{/donor/dashboard}" class="block px-4 py-2 text-sm hover:bg-gray-700">My Dashboard</a></li>
+                <li sec:authorize="hasAnyRole('DONOR','ADMIN')"><a th:href="@{/donor/{id}/update(id=${#authentication.principal.id})}" class="block px-4 py-2 text-sm hover:bg-gray-700">Update Details</a></li>
+                <li sec:authorize="hasAnyRole('DONOR','ADMIN')"><a th:href="@{/requests/new}" class="block px-4 py-2 text-sm hover:bg-gray-700">Make a Blood Request</a></li>
+                <li sec:authorize="hasAnyRole('DONOR','ADMIN')"><a th:href="@{/requests/my-requests}" class="block px-4 py-2 text-sm hover:bg-gray-700">View My Requests</a></li>
+                <li sec:authorize="hasAnyRole('DONOR','ADMIN')"><a th:href="@{/donations/history/{id}(id=${#authentication.principal.id})}" class="block px-4 py-2 text-sm hover:bg-gray-700">View Donation History</a></li>
+                <li sec:authorize="hasAnyRole('DONOR','ADMIN')"><a th:href="@{/search/searchPage}" class="block px-4 py-2 text-sm hover:bg-gray-700">Search Donors</a></li>
+                <li sec:authorize="hasAnyRole('DONOR','ADMIN')"><a th:href="@{/bloodcamps/list}" class="block px-4 py-2 text-sm hover:bg-gray-700">View Blood Camps</a></li>
                 <li><a href="/logout" class="block px-4 py-2 text-sm hover:bg-gray-700">Logout</a></li>
             </ul>
         </div>
     </nav>
     <script>
-        const btn = document.querySelector("button.mobile-menu-button");
-        const menu = document.querySelector(".mobile-menu");
+        function initDropdowns() {
+            const mobileMenuButton = document.querySelector("button.mobile-menu-button");
+            const mobileMenu = document.querySelector(".mobile-menu");
 
-        btn.addEventListener("click", () => {
-            menu.classList.toggle("hidden");
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener("click", () => {
+                    mobileMenu.classList.toggle("hidden");
+                });
+            }
+
+            document.querySelectorAll('.relative.group').forEach(group => {
+                let timeout;
+                const dropdown = group.querySelector('ul');
+
+                group.addEventListener('mouseenter', () => {
+                    clearTimeout(timeout);
+                    if (dropdown) {
+                        dropdown.classList.remove('hidden');
+                    }
+                });
+
+                group.addEventListener('mouseleave', () => {
+                    timeout = setTimeout(() => {
+                        if (dropdown) {
+                            dropdown.classList.add('hidden');
+                        }
+                    }, 200);
+                });
+            });
+        }
+
+        // Initialize dropdowns on initial page load
+        document.addEventListener('DOMContentLoaded', initDropdowns);
+
+        // Re-initialize dropdowns when navigating back and forth in browser history
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                initDropdowns();
+            }
         });
     </script>
 </header>

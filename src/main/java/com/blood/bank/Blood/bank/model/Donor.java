@@ -13,6 +13,7 @@ import java.security.Principal;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -74,10 +75,8 @@ public class Donor implements UserDetails,Principal{
 
     private String occupation;
 
-    @Column(length = 500)
-    @NotBlank(message = "Address is required")
-    @Size(max = 500, message = "Address cannot be more than 500 characters")
-    private String address;
+    @OneToMany(mappedBy = "donor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Address> addresses = new HashSet<>();
 
     @Past(message = "Last donate date must be in the past")
     private Date lastDonateDate;

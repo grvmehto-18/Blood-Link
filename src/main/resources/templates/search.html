@@ -2,40 +2,174 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::content})}">
 <head>
     <title>Search Donors - Blood Bank Management System</title>
+    <style>
+        /* Add any custom styles here if needed, though Tailwind should handle most */
+    </style>
 </head>
+
 <body>
     <div th:fragment="content" class="container mx-auto px-4 py-8">
         <div class="text-center mb-8">
             <img th:src="@{/images/blood box.png}" class="mx-auto w-full max-w-2xl h-auto object-cover rounded-lg shadow-md">
         </div>
 
-        <form th:action="@{/search/search}" method="get" class="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-md space-y-6">
-            <h2 class="text-2xl font-bold text-center text-red-600">Find Blood Donors</h2>
-            <div>
-                <label for="bloodGroup" class="block text-sm font-medium text-gray-700">Select Blood Group:</label>
-                <select id="bloodGroup" name="bloodGroup" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required>
-                    <option value="">Select a blood group</option>
-                    <option value="A+">A+</option>
-                    <option value="A-">A-</option>
-                    <option value="B+">B+</option>
-                    <option value="B-">B-</option>
-                    <option value="AB+">AB+</option>
-                    <option value="AB-">AB-</option>
-                    <option value="O+">O+</option>
-                    <option value="O-">O-</option>
-                    <option value="HH">HH (Bombay blood group)</option>
-                </select>
+        <form th:action="@{/search/search}" method="get" class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-xl space-y-6">
+            <h2 class="text-3xl font-extrabold text-center text-red-700 mb-6">Find Blood Donors</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="bloodGroup" class="block text-sm font-medium text-gray-700 mb-1">Select Blood Group:</label>
+                    <select id="bloodGroup" name="bloodGroup" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required>
+                        <option value="">Select a blood group</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="HH">HH (Bombay blood group)</option>
+                    </select>
+                </div>
+
+                <!-- Country, State, District, City Dropdowns -->
+                <div>
+                    <label for="country" class="block text-sm font-medium text-gray-700 mb-1">Country:</label>
+                    <select id="country" name="country" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+                        <option value="">Select Country</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="state" class="block text-sm font-medium text-gray-700 mb-1">State:</label>
+                    <select id="state" name="state" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+                        <option value="">Select State</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="district" class="block text-sm font-medium text-gray-700 mb-1">District:</label>
+                    <select id="district" name="district" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+                        <option value="">Select District</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City:</label>
+                    <select id="city" name="city" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+                        <option value="">Select City</option>
+                    </select>
+                </div>
+
+                <!-- New Filter Options -->
+                <div>
+                    <label for="lastDonateDate" class="block text-sm font-medium text-gray-700 mb-1">Last Donated Date (on or after):</label>
+                    <input type="date" id="lastDonateDate" name="lastDonateDate" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+                </div>
+                <div>
+                    <label for="availability" class="block text-sm font-medium text-gray-700 mb-1">Availability:</label>
+                    <select id="availability" name="availability" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+                        <option value="">Any</option>
+                        <option value="availableNow">Available Now</option>
+                        <option value="within24Hours">Within 24 Hours</option>
+                        <option value="within3Days">Within 3 Days</option>
+                        <option value="withinWeek">Within a Week</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="gender" class="block text-sm font-medium text-gray-700 mb-1">Gender:</label>
+                    <select id="gender" name="gender" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+                        <option value="">Any</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="minAge" class="block text-sm font-medium text-gray-700 mb-1">Min Age:</label>
+                        <input type="number" id="minAge" name="minAge" min="18" max="100" placeholder="18" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+                    </div>
+                    <div>
+                        <label for="maxAge" class="block text-sm font-medium text-gray-700 mb-1">Max Age:</label>
+                        <input type="number" id="maxAge" name="maxAge" min="18" max="100" placeholder="60" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+                    </div>
+                </div>
             </div>
 
-            <div>
-                <label for="address" class="block text-sm font-medium text-gray-700">Location:</label>
-                <input type="text" id="address" name="address" placeholder="Where do you need? e.g., Indore" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required>
-            </div>
-
-            <div class="text-center">
-                <button type="submit" class="w-full px-4 py-2 font-medium text-white bg-red-500 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Search</button>
+            <div class="text-center pt-4">
+                <button type="submit" class="w-full md:w-auto px-8 py-3 font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition duration-150 ease-in-out">Search Donors</button>
             </div>
         </form>
     </div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        document.addEventListener('DOMContentLoaded', () => {
+            const countrySelect = document.getElementById('country');
+            const stateSelect = document.getElementById('state');
+            const districtSelect = document.getElementById('district');
+            const citySelect = document.getElementById('city');
+
+            // Function to populate dropdowns
+            const populateDropdown = (selectElement, data, defaultOptionText) => {
+                selectElement.innerHTML = `<option value="">${defaultOptionText}</option>`;
+                data.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item;
+                    option.textContent = item;
+                    selectElement.appendChild(option);
+                });
+            };
+
+            // Populate initial countries from model
+            const initialCountries = /*[[${countries}]]*/ [];
+            populateDropdown(countrySelect, initialCountries, 'Select Country');
+
+            // Fetch States based on selected Country
+            countrySelect.addEventListener('change', () => {
+                const selectedCountry = countrySelect.value;
+                if (selectedCountry) {
+                    fetch(`/search/states?country=${selectedCountry}`)
+                        .then(response => response.json())
+                        .then(data => populateDropdown(stateSelect, data, 'Select State'))
+                        .catch(error => console.error('Error fetching states:', error));
+                } else {
+                    populateDropdown(stateSelect, [], 'Select State');
+                    populateDropdown(districtSelect, [], 'Select District');
+                    populateDropdown(citySelect, [], 'Select City');
+                }
+            });
+
+            // Fetch Districts based on selected Country and State
+            stateSelect.addEventListener('change', () => {
+                const selectedCountry = countrySelect.value;
+                const selectedState = stateSelect.value;
+                if (selectedCountry && selectedState) {
+                    fetch(`/search/districts?country=${selectedCountry}&state=${selectedState}`)
+                        .then(response => response.json())
+                        .then(data => populateDropdown(districtSelect, data, 'Select District'))
+                        .catch(error => console.error('Error fetching districts:', error));
+                } else {
+                    populateDropdown(districtSelect, [], 'Select District');
+                    populateDropdown(citySelect, [], 'Select City');
+                }
+            });
+
+            // Fetch Cities based on selected Country, State, and District
+            districtSelect.addEventListener('change', () => {
+                const selectedCountry = countrySelect.value;
+                const selectedState = stateSelect.value;
+                const selectedDistrict = districtSelect.value;
+                if (selectedCountry && selectedState && selectedDistrict) {
+                    fetch(`/search/cities?country=${selectedCountry}&state=${selectedState}&district=${selectedDistrict}`)
+                        .then(response => response.json())
+                        .then(data => populateDropdown(citySelect, data, 'Select City'))
+                        .catch(error => console.error('Error fetching cities:', error));
+                } else {
+                    populateDropdown(citySelect, [], 'Select City');
+                }
+            });
+        });
+        /*]]>*/
+    </script>
 </body>
 </html>

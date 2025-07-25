@@ -4,7 +4,7 @@
     <title>🩸 Donor Registration - Blood Bank Management System</title>
 </head>
 <body class="bg-gray-100 mt-5">
-    <div th:fragment="content" class="flex items-center justify-center min-h-screen">
+    <div th:fragment="content" class="mt-5 flex items-center justify-center min-h-screen">
         <div class="w-full max-w-2xl p-8 space-y-6 bg-white rounded-lg shadow-md">
             <h1 class="text-2xl font-bold text-center text-red-500">Donor Registration</h1>
 
@@ -17,7 +17,7 @@
             </div>
 
             <!-- Registration Form -->
-            <form th:action="@{/auth/signUp}" th:object="${donor}" method="post" class="space-y-4" id="registrationForm">
+            <form th:action="@{/auth/signUp}" th:object="${donorRegistrationDto}" method="post" class="space-y-4" id="registrationForm">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label for="fullName" class="block text-sm font-medium text-gray-700">Full Name:</label>
@@ -90,9 +90,41 @@
                     <input type="text" th:field="*{occupation}" id="occupation" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
                 </div>
 
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="country" class="block text-sm font-medium text-gray-700">Country:</label>
+                        <input type="text" th:field="*{country}" id="country" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+                    </div>
+                    <div>
+                        <label for="state" class="block text-sm font-medium text-gray-700">State:</label>
+                        <input type="text" th:field="*{state}" id="state" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="district" class="block text-sm font-medium text-gray-700">District:</label>
+                        <input type="text" th:field="*{district}" id="district" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+                    </div>
+                    <div>
+                        <label for="city" class="block text-sm font-medium text-gray-700">City:</label>
+                        <input type="text" th:field="*{city}" id="city" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+                    </div>
+                </div>
+
                 <div>
-                    <label for="address" class="block text-sm font-medium text-gray-700">Address:</label>
-                    <textarea th:field="*{address}" id="address" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"></textarea>
+                    <label for="streetAddress" class="block text-sm font-medium text-gray-700">Street Address:</label>
+                    <input type="text" th:field="*{streetAddress}" id="streetAddress" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="zipCode" class="block text-sm font-medium text-gray-700">Zip Code:</label>
+                        <input type="text" th:field="*{zipCode}" id="zipCode" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+                    </div>
+                    <div>
+                        <label for="landmark" class="block text-sm font-medium text-gray-700">Landmark:</label>
+                        <input type="text" th:field="*{landmark}" id="landmark" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+                    </div>
                 </div>
 
                 <div>
@@ -134,102 +166,6 @@
             </div>
         </div>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('registrationForm');
-            const fullNameInput = document.getElementById('fullName');
-            const genderSelect = document.getElementById('gender');
-            const dateOfBirthInput = document.getElementById('dateOfBirth');
-            const bloodGroupSelect = document.getElementById('bloodGroup');
-            const phoneNumberInput = document.getElementById('phoneNumber');
-            const emailInput = document.getElementById('email');
-            const usernameInput = document.getElementById('username');
-            const passwordInput = document.getElementById('password');
-
-            const fullNameError = document.getElementById('fullNameError');
-            const genderError = document.getElementById('genderError');
-            const dateOfBirthError = document.getElementById('dateOfBirthError');
-            const bloodGroupError = document.getElementById('bloodGroupError');
-            const phoneNumberError = document.getElementById('phoneNumberError');
-            const emailError = document.getElementById('emailError');
-            const usernameError = document.getElementById('usernameError');
-            const passwordError = document.getElementById('passwordError');
-
-            const validateField = (input, errorElement, validationFn, errorMessage) => {
-                const isValid = validationFn(input.value);
-                if (!isValid) {
-                    errorElement.textContent = errorMessage;
-                    errorElement.style.display = 'block'; // Ensure visibility
-                    input.classList.add('border-red-500');
-                    input.classList.remove('border-gray-300');
-                } else {
-                    errorElement.textContent = '';
-                    errorElement.style.display = 'none'; // Hide when valid
-                    input.classList.remove('border-red-500');
-                    input.classList.add('border-gray-300');
-                }
-                return isValid;
-            };
-
-            // Validation functions
-            const isRequired = (value) => value.trim() !== '';
-            const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-            const isValidPhoneNumber = (value) => /^[0-9]{10}$/.test(value); // 10 digits
-            const isStrongPassword = (value) => value.length >= 8 && /[A-Z]/.test(value) && /[a-z]/.test(value) && /[0-9]/.test(value) && /[^A-Za-z0-9]/.test(value); // Min 8 chars, uppercase, lowercase, number, special char
-            const isValidDateOfBirth = (value) => {
-                const dob = new Date(value);
-                const today = new Date();
-                let age = today.getFullYear() - dob.getFullYear();
-                const m = today.getMonth() - dob.getMonth();
-                if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
-                    age--;
-                }
-                return age >= 18; // Must be at least 18 years old
-            };
-
-            // Event Listeners for real-time validation
-            fullNameInput.addEventListener('input', () => validateField(fullNameInput, fullNameError, isRequired, 'Full Name is required.'));
-            fullNameInput.addEventListener('blur', () => validateField(fullNameInput, fullNameError, isRequired, 'Full Name is required.'));
-
-            genderSelect.addEventListener('change', () => validateField(genderSelect, genderError, isRequired, 'Gender is required.'));
-            genderSelect.addEventListener('blur', () => validateField(genderSelect, genderError, isRequired, 'Gender is required.'));
-
-            dateOfBirthInput.addEventListener('change', () => validateField(dateOfBirthInput, dateOfBirthError, isValidDateOfBirth, 'Must be at least 18 years old.'));
-            dateOfBirthInput.addEventListener('blur', () => validateField(dateOfBirthInput, dateOfBirthError, isValidDateOfBirth, 'Must be at least 18 years old.'));
-
-            bloodGroupSelect.addEventListener('change', () => validateField(bloodGroupSelect, bloodGroupError, isRequired, 'Blood Group is required.'));
-            bloodGroupSelect.addEventListener('blur', () => validateField(bloodGroupSelect, bloodGroupError, isRequired, 'Blood Group is required.'));
-
-            phoneNumberInput.addEventListener('input', () => validateField(phoneNumberInput, phoneNumberError, isValidPhoneNumber, 'Phone Number must be 10 digits.'));
-            phoneNumberInput.addEventListener('blur', () => validateField(phoneNumberInput, phoneNumberError, isValidPhoneNumber, 'Phone Number must be 10 digits.'));
-
-            emailInput.addEventListener('input', () => validateField(emailInput, emailError, isValidEmail, 'Invalid email format.'));
-            emailInput.addEventListener('blur', () => validateField(emailInput, emailError, isValidEmail, 'Invalid email format.'));
-
-            usernameInput.addEventListener('input', () => validateField(usernameInput, usernameError, isRequired, 'Username is required.'));
-            usernameInput.addEventListener('blur', () => validateField(usernameInput, usernameError, isRequired, 'Username is required.'));
-
-            passwordInput.addEventListener('input', () => validateField(passwordInput, passwordError, isStrongPassword, 'Password must be at least 8 characters, with uppercase, lowercase, number, and special character.'));
-            passwordInput.addEventListener('blur', () => validateField(passwordInput, passwordError, isStrongPassword, 'Password must be at least 8 characters, with uppercase, lowercase, number, and special character.'));
-
-            form.addEventListener('submit', (e) => {
-                let isFormValid = true;
-
-                // Validate all fields on submit
-                isFormValid = validateField(fullNameInput, fullNameError, isRequired, 'Full Name is required.') && isFormValid;
-                isFormValid = validateField(genderSelect, genderError, isRequired, 'Gender is required.') && isFormValid;
-                isFormValid = validateField(dateOfBirthInput, dateOfBirthError, isValidDateOfBirth, 'Must be at least 18 years old.') && isFormValid;
-                isFormValid = validateField(bloodGroupSelect, bloodGroupError, isRequired, 'Blood Group is required.') && isFormValid;
-                isFormValid = validateField(phoneNumberInput, phoneNumberError, isValidPhoneNumber, 'Phone Number must be 10 digits.') && isFormValid;
-                isFormValid = validateField(emailInput, emailError, isValidEmail, 'Invalid email format.') && isFormValid;
-                isFormValid = validateField(usernameInput, usernameError, isRequired, 'Username is required.') && isFormValid;
-                isFormValid = validateField(passwordInput, passwordError, isStrongPassword, 'Password must be at least 8 characters, with uppercase, lowercase, number, and special character.') && isFormValid;
-
-                if (!isFormValid) {
-                    e.preventDefault(); // Prevent form submission if validation fails
-                }
-            });
-        });
-    </script>
+    
 </body>
 </html>

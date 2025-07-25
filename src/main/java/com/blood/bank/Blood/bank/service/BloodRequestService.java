@@ -41,10 +41,10 @@ public class BloodRequestService {
         return bloodRequestRepository.save(bloodRequest);
     }
 
-    public List<Donor> findMatchingDonors(String bloodGroup, String location) {
-        // This will use the updated findByBloodGroupAndAddressContainingIgnoreCase method
-        return donorRepository.findByBloodGroupAndAddressContainingIgnoreCase(bloodGroup, location);
-    }
+//    public List<Donor> findMatchingDonors(String bloodGroup, String location) {
+//        // This will use the updated findByBloodGroupAndAddressContainingIgnoreCase method
+//        return donorRepository.findByBloodGroupAndAddressContainingIgnoreCase(bloodGroup, location);
+//    }
 
     public List<BloodRequest> getBloodRequestsByRequester(Long requesterId) {
         return bloodRequestRepository.findByRequesterId(requesterId);

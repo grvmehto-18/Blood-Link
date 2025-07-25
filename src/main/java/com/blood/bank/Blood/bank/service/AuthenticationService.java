@@ -5,7 +5,9 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
+import com.blood.bank.Blood.bank.Repository.AddressRepository;
 import com.blood.bank.Blood.bank.exception.InvalidVerificationCodeException;
+import com.blood.bank.Blood.bank.model.Address;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,15 +26,17 @@ public class AuthenticationService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final AddressRepository addressRepository;
 
     
 
     public AuthenticationService(DonorRepository userRepository, RoleRepository roleRepository,
-            PasswordEncoder passwordEncoder,EmailService emailService) {
+            PasswordEncoder passwordEncoder,EmailService emailService, AddressRepository addressRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
+        this.addressRepository = addressRepository;
     }
 
     @Transactional
@@ -44,7 +48,18 @@ public class AuthenticationService {
         input.setTime(LocalDateTime.now().plusMinutes(15));
         input.setEnabled(false);
         input.setRoles(Set.of(userRole));
+        
+        // Save the donor first to get an ID
         Donor unVerifiedDonor = userRepository.save(input);
+
+        // Associate the address with the donor
+        if (input.getAddresses() != null) {
+            for (Address address : input.getAddresses()) {
+                address.setDonor(unVerifiedDonor);
+                addressRepository.save(address);
+            }
+        }
+
         sendVerificationEmail(input);
 
         return unVerifiedDonor;
