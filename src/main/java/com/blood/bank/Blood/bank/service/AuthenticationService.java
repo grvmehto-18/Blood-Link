@@ -49,16 +49,13 @@ public class AuthenticationService {
         input.setEnabled(false);
         input.setRoles(Set.of(userRole));
         
-        // Save the donor first to get an ID
-        Donor unVerifiedDonor = userRepository.save(input);
-
-        // Associate the address with the donor
         if (input.getAddresses() != null) {
             for (Address address : input.getAddresses()) {
-                address.setDonor(unVerifiedDonor);
-                addressRepository.save(address);
+                address.setDonor(input);
             }
         }
+
+        Donor unVerifiedDonor = userRepository.save(input);
 
         sendVerificationEmail(input);
 

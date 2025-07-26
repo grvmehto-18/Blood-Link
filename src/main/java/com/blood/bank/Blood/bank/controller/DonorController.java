@@ -143,18 +143,22 @@ public class DonorController {
         existingDonor.setHasBleedingDisorders(donorDto.isHasBleedingDisorders());
         existingDonor.setHasHIV(donorDto.isHasHIV());
 
-        if (existingDonor.getAddresses().isEmpty()) {
-            existingDonor.getAddresses().add(new Address());
-        }
-        Address address = existingDonor.getAddresses().iterator().next();
-        address.setCountry(donorDto.getCountry());
-        address.setState(donorDto.getState());
-        address.setDistrict(donorDto.getDistrict());
-        address.setCity(donorDto.getCity());
-        address.setStreetAddress(donorDto.getStreetAddress());
-        address.setZipCode(donorDto.getZipCode());
-        address.setLandmark(donorDto.getLandmark());
+        Address address;
+    if (existingDonor.getAddresses().isEmpty()) {
+        address = new Address();
+        existingDonor.getAddresses().add(address);
         address.setDonor(existingDonor);
+    } else {
+        address = existingDonor.getAddresses().iterator().next();
+    }
+
+    address.setCountry(donorDto.getCountry());
+    address.setState(donorDto.getState());
+    address.setDistrict(donorDto.getDistrict());
+    address.setCity(donorDto.getCity());
+    address.setStreetAddress(donorDto.getStreetAddress());
+    address.setZipCode(donorDto.getZipCode());
+    address.setLandmark(donorDto.getLandmark());
 
 
         donorService.updateDonor(id, existingDonor);

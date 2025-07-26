@@ -49,6 +49,10 @@
                 </div>
             </div>
             <div>
+                <label for="occupation" class="block text-sm font-medium text-gray-700">Occupation:</label>
+                <input type="text" th:field="*{occupation}" id="occupation" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+            </div>
+            <div>
                 <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Phone Number</label>
                 <input type="text" id="phoneNumber" th:field="*{phoneNumber}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
                 <p th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="text-red-500 text-xs italic"></p>
@@ -92,6 +96,10 @@
                 <label for="dateOfBirth" class="block text-sm font-medium text-gray-700">Date of Birth:</label>
                 <input id="dateOfBirth" type="date" th:field="*{dateOfBirth}" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
                 <p th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}" class_="text-red-500 text-xs italic"></p>
+            </div>
+            <div>
+                <label for="lastDonateDate" class="block text-sm font-medium text-gray-700">Last Donate Date:</label>
+                <input type="date" th:field="*{lastDonateDate}" id="lastDonateDate" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
             </div>
             <div>
                 <label for="bloodGroup" class="block text-sm font-medium text-gray-700">Blood Group: </label>
