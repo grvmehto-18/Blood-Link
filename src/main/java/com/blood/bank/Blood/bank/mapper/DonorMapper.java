@@ -30,6 +30,7 @@ public interface DonorMapper {
     DonorRegistrationDto toDto(Donor donor);
 
     @Mapping(target = "id", ignore = true) // Ignore ID for update
+    @Mapping(target = "password", ignore = true) // Ignore password for update, handled in service
     void updateDonorFromDto(DonorRegistrationDto donorRegistrationDto, @MappingTarget Donor donor);
 
     @Named("mapAddress")

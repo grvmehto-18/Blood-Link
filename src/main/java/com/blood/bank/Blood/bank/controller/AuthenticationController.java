@@ -17,8 +17,6 @@ import com.blood.bank.Blood.bank.mapper.DonorMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.HashSet;
-import java.util.Set;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,7 +26,6 @@ public class AuthenticationController {
 
 
     private final AuthenticationService authenticationService;
-    private final DonorMapper donorMapper;
 
     @GetMapping("/signUp")
     public String showSignUpForm(Model model) {

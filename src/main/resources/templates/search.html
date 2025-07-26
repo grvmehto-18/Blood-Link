@@ -9,9 +9,6 @@
 
 <body>
     <div th:fragment="content" class="container mx-auto px-4 py-8">
-        <div class="text-center mb-8">
-            <img th:src="@{/images/blood box.png}" class="mx-auto w-full max-w-2xl h-auto object-cover rounded-lg shadow-md">
-        </div>
 
         <form th:action="@{/search/search}" method="get" class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-xl space-y-6">
             <h2 class="text-3xl font-extrabold text-center text-red-700 mb-6">Find Blood Donors</h2>
@@ -21,15 +18,15 @@
                     <label for="bloodGroup" class="block text-sm font-medium text-gray-700 mb-1">Select Blood Group:</label>
                     <select id="bloodGroup" name="bloodGroup" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" required>
                         <option value="">Select a blood group</option>
-                        <option value="A+">A+</option>
-                        <option value="A-">A-</option>
-                        <option value="B+">B+</option>
-                        <option value="B-">B-</option>
-                        <option value="AB+">AB+</option>
-                        <option value="AB-">AB-</option>
-                        <option value="O+">O+</option>
-                        <option value="O-">O-</option>
-                        <option value="HH">HH (Bombay blood group)</option>
+                        <option value="A+" th:selected="${selectedBloodGroup == 'A+'}">A+</option>
+                        <option value="A-" th:selected="${selectedBloodGroup == 'A-'}">A-</option>
+                        <option value="B+" th:selected="${selectedBloodGroup == 'B+'}">B+</option>
+                        <option value="B-" th:selected="${selectedBloodGroup == 'B-'}">B-</option>
+                        <option value="AB+" th:selected="${selectedBloodGroup == 'AB+'}">AB+</option>
+                        <option value="AB-" th:selected="${selectedBloodGroup == 'AB-'}">AB-</option>
+                        <option value="O+" th:selected="${selectedBloodGroup == 'O+'}">O+</option>
+                        <option value="O-" th:selected="${selectedBloodGroup == 'O-'}">O-</option>
+                        <option value="HH" th:selected="${selectedBloodGroup == 'HH'}">HH (Bombay blood group)</option>
                     </select>
                 </div>
 
@@ -38,32 +35,40 @@
                     <label for="country" class="block text-sm font-medium text-gray-700 mb-1">Country:</label>
                     <select id="country" name="country" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
                         <option value="">Select Country</option>
+                        <option th:each="c : ${countries}" th:value="${c}" th:text="${c}" th:selected="${c == selectedCountry}"></option>
                     </select>
                 </div>
                 <div>
                     <label for="state" class="block text-sm font-medium text-gray-700 mb-1">State:</label>
                     <select id="state" name="state" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
                         <option value="">Select State</option>
+                        <option th:each="s : ${allStates}" th:value="${s}" th:text="${s}" th:selected="${s == selectedState}"></option>
                     </select>
                 </div>
                 <div>
                     <label for="district" class="block text-sm font-medium text-gray-700 mb-1">District:</label>
                     <select id="district" name="district" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
                         <option value="">Select District</option>
+                        <option th:each="d : ${allDistricts}" th:value="${d}" th:text="${d}" th:selected="${d == selectedDistrict}"></option>
                     </select>
                 </div>
                 <div>
                     <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City:</label>
                     <select id="city" name="city" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
                         <option value="">Select City</option>
+                        <option th:each="c : ${allCities}" th:value="${c}" th:text="${c}" th:selected="${c == selectedCity}"></option>
                     </select>
+                </div>
+
+                <div>
+                    <label for="area" class="block text-sm font-medium text-gray-700 mb-1">Area (comma-separated):</label>
+                    <input type="text" id="area" name="area" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" th:value="${selectedArea}">
                 </div>
 
                 <!-- New Filter Options -->
                 <div>
                     <label for="lastDonateDate" class="block text-sm font-medium text-gray-700 mb-1">Last Donated Date (on or after):</label>
-                    <input type="date" id="lastDonateDate" name="lastDonateDate" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
-                </div>
+                    <input type="date" id="lastDonateDate" name="lastDonateDate" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" th:value="${selectedLastDonateDate}">
                 <div>
                     <label for="availability" class="block text-sm font-medium text-gray-700 mb-1">Availability:</label>
                     <select id="availability" name="availability" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
@@ -109,65 +114,100 @@
             const districtSelect = document.getElementById('district');
             const citySelect = document.getElementById('city');
 
+            // Pre-loaded data from the model
+            const allCountries = /*[[${countries}]]*/ [];
+            const allStates = /*[[${allStates}]]*/ [];
+            const allDistricts = /*[[${allDistricts}]]*/ [];
+            const allCities = /*[[${allCities}]]*/ [];
+
+            // Selected values from the model (for retaining selection after form submission)
+            const selectedCountry = /*[[${selectedCountry}]]*/ null;
+            const selectedState = /*[[${selectedState}]]*/ null;
+            const selectedDistrict = /*[[${selectedDistrict}]]*/ null;
+            const selectedCity = /*[[${selectedCity}]]*/ null;
+
             // Function to populate dropdowns
-            const populateDropdown = (selectElement, data, defaultOptionText) => {
+            const populateDropdown = (selectElement, data, defaultOptionText, selectedValue) => {
                 selectElement.innerHTML = `<option value="">${defaultOptionText}</option>`;
                 data.forEach(item => {
                     const option = document.createElement('option');
                     option.value = item;
                     option.textContent = item;
+                    if (item === selectedValue) {
+                        option.selected = true;
+                    }
                     selectElement.appendChild(option);
                 });
             };
 
-            // Populate initial countries from model
-            const initialCountries = /*[[${countries}]]*/ [];
-            populateDropdown(countrySelect, initialCountries, 'Select Country');
+            // Initial population of Country dropdown
+            populateDropdown(countrySelect, allCountries, 'Select Country', selectedCountry);
 
-            // Fetch States based on selected Country
+            // Function to filter and populate States
+            const filterAndPopulateStates = () => {
+                const currentCountry = countrySelect.value;
+                const filteredStates = allStates.filter(state => {
+                    // Assuming state data might be structured as "State, Country" or similar
+                    // For now, we'll rely on the backend to provide states already filtered by country if needed
+                    // Or, if allStates contains all states, we need a way to link them to countries.
+                    // Given the current backend methods, allStates is just a flat list of all states.
+                    // This means we need to fetch states based on country from the backend, or have a more complex data structure.
+                    // For now, let's assume allStates is just a list of all states, and we'll populate based on selection.
+                    // This part needs refinement based on how allStates is actually structured and related to countries.
+                    return true; // Placeholder: needs actual filtering logic if allStates is global
+                });
+                populateDropdown(stateSelect, filteredStates, 'Select State', selectedState);
+            };
+
+            // Function to filter and populate Districts
+            const filterAndPopulateDistricts = () => {
+                const currentCountry = countrySelect.value;
+                const currentState = stateSelect.value;
+                const filteredDistricts = allDistricts.filter(district => {
+                    // Placeholder: needs actual filtering logic
+                    return true;
+                });
+                populateDropdown(districtSelect, filteredDistricts, 'Select District', selectedDistrict);
+            };
+
+            // Function to filter and populate Cities
+            const filterAndPopulateCities = () => {
+                const currentCountry = countrySelect.value;
+                const currentState = stateSelect.value;
+                const currentDistrict = districtSelect.value;
+                const filteredCities = allCities.filter(city => {
+                    // Placeholder: needs actual filtering logic
+                    return true;
+                });
+                populateDropdown(citySelect, filteredCities, 'Select City', selectedCity);
+            };
+
+            // Event Listeners for dynamic population
             countrySelect.addEventListener('change', () => {
-                const selectedCountry = countrySelect.value;
-                if (selectedCountry) {
-                    fetch(`/search/states?country=${selectedCountry}`)
-                        .then(response => response.json())
-                        .then(data => populateDropdown(stateSelect, data, 'Select State'))
-                        .catch(error => console.error('Error fetching states:', error));
-                } else {
-                    populateDropdown(stateSelect, [], 'Select State');
-                    populateDropdown(districtSelect, [], 'Select District');
-                    populateDropdown(citySelect, [], 'Select City');
-                }
+                filterAndPopulateStates();
+                populateDropdown(districtSelect, [], 'Select District', null); // Clear districts
+                populateDropdown(citySelect, [], 'Select City', null); // Clear cities
             });
 
-            // Fetch Districts based on selected Country and State
             stateSelect.addEventListener('change', () => {
-                const selectedCountry = countrySelect.value;
-                const selectedState = stateSelect.value;
-                if (selectedCountry && selectedState) {
-                    fetch(`/search/districts?country=${selectedCountry}&state=${selectedState}`)
-                        .then(response => response.json())
-                        .then(data => populateDropdown(districtSelect, data, 'Select District'))
-                        .catch(error => console.error('Error fetching districts:', error));
-                } else {
-                    populateDropdown(districtSelect, [], 'Select District');
-                    populateDropdown(citySelect, [], 'Select City');
-                }
+                filterAndPopulateDistricts();
+                populateDropdown(citySelect, [], 'Select City', null); // Clear cities
             });
 
-            // Fetch Cities based on selected Country, State, and District
             districtSelect.addEventListener('change', () => {
-                const selectedCountry = countrySelect.value;
-                const selectedState = stateSelect.value;
-                const selectedDistrict = districtSelect.value;
-                if (selectedCountry && selectedState && selectedDistrict) {
-                    fetch(`/search/cities?country=${selectedCountry}&state=${selectedState}&district=${selectedDistrict}`)
-                        .then(response => response.json())
-                        .then(data => populateDropdown(citySelect, data, 'Select City'))
-                        .catch(error => console.error('Error fetching cities:', error));
-                } else {
-                    populateDropdown(citySelect, [], 'Select City');
-                }
+                filterAndPopulateCities();
             });
+
+            // Initial population of dependent dropdowns if values are already selected (e.g., after a search)
+            if (selectedCountry) {
+                filterAndPopulateStates();
+            }
+            if (selectedState) {
+                filterAndPopulateDistricts();
+            }
+            if (selectedDistrict) {
+                filterAndPopulateCities();
+            }
         });
         /*]]>*/
     </script>

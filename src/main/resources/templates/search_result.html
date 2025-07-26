@@ -29,7 +29,17 @@
                             <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <a th:href="'tel:' + ${donor.phoneNumber}" th:text="${donor.phoneNumber}" class="text-blue-600 hover:underline"></a>
                             </td>
-                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm" th:text="${donor.address}"></td>
+                            <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                <span th:if="${!#lists.isEmpty(donor.addresses)}">
+                                    <span th:each="address : ${donor.addresses}">
+                                        <span th:text="${address.city}"></span>, 
+                                        <span th:text="${address.district}"></span>, 
+                                        <span th:text="${address.state}"></span>, 
+                                        <span th:text="${address.country}"></span>
+                                    </span>
+                                </span>
+                                <span th:unless="${!#lists.isEmpty(donor.addresses)}">N/A</span>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

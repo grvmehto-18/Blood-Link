@@ -20,4 +20,13 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
 
     @Query("SELECT DISTINCT a.city FROM Address a WHERE a.country = :country AND a.state = :state AND a.district = :district AND a.city IS NOT NULL")
     List<String> findDistinctCitiesByCountryAndStateAndDistrict(@Param("country") String country, @Param("state") String state, @Param("district") String district);
+
+    @Query("SELECT DISTINCT a.state FROM Address a WHERE a.state IS NOT NULL")
+    List<String> findAllDistinctStates();
+
+    @Query("SELECT DISTINCT a.district FROM Address a WHERE a.district IS NOT NULL")
+    List<String> findAllDistinctDistricts();
+
+    @Query("SELECT DISTINCT a.city FROM Address a WHERE a.city IS NOT NULL")
+    List<String> findAllDistinctCities();
 }

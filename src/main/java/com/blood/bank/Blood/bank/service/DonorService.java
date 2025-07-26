@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import com.blood.bank.Blood.bank.dto.DonorRegistrationDto;
 import com.blood.bank.Blood.bank.mapper.DonorMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Slf4j
 @Service
@@ -26,11 +27,13 @@ public class DonorService {
     private final DonorRepository donorRepository;
     private final AddressRepository addressRepository;
     private final DonorMapper donorMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public DonorService(DonorRepository donorRepository, AddressRepository addressRepository, DonorMapper donorMapper) {
+    public DonorService(DonorRepository donorRepository, AddressRepository addressRepository, DonorMapper donorMapper, PasswordEncoder passwordEncoder) {
         this.donorRepository = donorRepository;
         this.addressRepository = addressRepository;
         this.donorMapper = donorMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<Donor> findAll() {
@@ -66,7 +69,7 @@ public class DonorService {
             try {
                 lastDonateDate = java.sql.Date.valueOf(lastDonateDateStr);
             } catch (IllegalArgumentException e) {
-                e.printStackTrace();
+                log.error("Error parsing lastDonateDate: {}", lastDonateDateStr, e);
             }
         }
 
@@ -80,14 +83,25 @@ public class DonorService {
             minBirthDate = new java.sql.Date(System.currentTimeMillis() - (maxAge * 365L * 24 * 60 * 60 * 1000));
         }
 
+        
+
+        log.info("Searching donors with: bloodGroup={}, country={}, state={}, district={}, city={}, lastDonateDate={}, gender={}, maxBirthDate={}, minBirthDate={}",
+                bloodGroup, country, state, district, city, lastDonateDate, gender, maxBirthDate, minBirthDate);
+        String finalGender = (gender != null && gender.isEmpty()) ? null : gender;
+
+        String finalCountry = (country != null && country.isEmpty()) ? null : country;
+        String finalState = (state != null && state.isEmpty()) ? null : state;
+        String finalDistrict = (district != null && district.isEmpty()) ? null : district;
+        String finalCity = (city != null && city.isEmpty()) ? null : city;
+
         List<Donor> donors = donorRepository.searchDonors(
                 bloodGroup,
-                country,
-                state,
-                district,
-                city,
+                finalCountry,
+                finalState,
+                finalDistrict,
+                finalCity,
                 lastDonateDate,
-                gender,
+                finalGender,
                 maxBirthDate,
                 minBirthDate
         );
@@ -151,6 +165,9 @@ public class DonorService {
         Donor existingDonor = donorRepository.findById(id)
                 .orElseThrow(() -> new DonorNotFoundException("Donor not found with id: " + id));
 
+        if (updatedDonorDto.getPassword() != null && !updatedDonorDto.getPassword().isEmpty()) {
+            existingDonor.setPassword(passwordEncoder.encode(updatedDonorDto.getPassword()));
+        }
         donorMapper.updateDonorFromDto(updatedDonorDto, existingDonor);
 
         Address addressToUpdate;
@@ -179,19 +196,45 @@ public class DonorService {
     }
 
     public List<String> findDistinctCountries() {
-        return addressRepository.findDistinctCountries();
+        List<String> countries = addressRepository.findDistinctCountries();
+        log.info("Found distinct countries: {}", countries);
+        return countries;
     }
 
     public List<String> findDistinctStatesByCountry(String country) {
-        return addressRepository.findDistinctStatesByCountry(country);
+        List<String> states = addressRepository.findDistinctStatesByCountry(country);
+        log.info("Found distinct states for country {}: {}", country, states);
+        return states;
     }
 
     public List<String> findDistinctDistrictsByCountryAndState(String country, String state) {
-        return addressRepository.findDistinctDistrictsByCountryAndState(country, state);
+        List<String> districts = addressRepository.findDistinctDistrictsByCountryAndState(country, state);
+        log.info("Found distinct districts for country {} and state {}: {}", country, state, districts);
+        return districts;
     }
 
     public List<String> findDistinctCitiesByCountryAndStateAndDistrict(String country, String state, String district) {
-        return addressRepository.findDistinctCitiesByCountryAndStateAndDistrict(country, state, district);
+        List<String> cities = addressRepository.findDistinctCitiesByCountryAndStateAndDistrict(country, state, district);
+        log.info("Found distinct cities for country {}, state {}, district {}: {}", country, state, district, cities);
+        return cities;
+    }
+
+    public List<String> findAllDistinctStates() {
+        List<String> states = addressRepository.findAllDistinctStates();
+        log.info("Found all distinct states: {}", states);
+        return states;
+    }
+
+    public List<String> findAllDistinctDistricts() {
+        List<String> districts = addressRepository.findAllDistinctDistricts();
+        log.info("Found all distinct districts: {}", districts);
+        return districts;
+    }
+
+    public List<String> findAllDistinctCities() {
+        List<String> cities = addressRepository.findAllDistinctCities();
+        log.info("Found all distinct cities: {}", cities);
+        return cities;
     }
 }
 
