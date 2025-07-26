@@ -12,7 +12,7 @@ import com.blood.bank.Blood.bank.dto.VerifyUserDto;
 import com.blood.bank.Blood.bank.model.Donor;
 import com.blood.bank.Blood.bank.service.AuthenticationService;
 import com.blood.bank.Blood.bank.dto.DonorRegistrationDto;
-import com.blood.bank.Blood.bank.model.Address;
+import com.blood.bank.Blood.bank.mapper.DonorMapper;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +28,7 @@ public class AuthenticationController {
 
 
     private final AuthenticationService authenticationService;
+    private final DonorMapper donorMapper;
 
     @GetMapping("/signUp")
     public String showSignUpForm(Model model) {
@@ -42,39 +43,7 @@ public class AuthenticationController {
             return "donorRegistration";
         }
         try {
-            // Map DTO to Donor and Address entities
-            Donor newDonor = Donor.builder()
-                    .fullName(donorRegistrationDto.getFullName())
-                    .gender(donorRegistrationDto.getGender())
-                    .dateOfBirth(donorRegistrationDto.getDateOfBirth())
-                    .bloodGroup(donorRegistrationDto.getBloodGroup())
-                    .phoneNumber(donorRegistrationDto.getPhoneNumber())
-                    .email(donorRegistrationDto.getEmail())
-                    .username(donorRegistrationDto.getUsername())
-                    .password(donorRegistrationDto.getPassword())
-                    .occupation(donorRegistrationDto.getOccupation())
-                    .lastDonateDate(donorRegistrationDto.getLastDonateDate())
-                    .hasDiseases(donorRegistrationDto.isHasDiseases())
-                    .hasAllergies(donorRegistrationDto.isHasAllergies())
-                    .hasCardiacConditions(donorRegistrationDto.isHasCardiacConditions())
-                    .hasBleedingDisorders(donorRegistrationDto.isHasBleedingDisorders())
-                    .hasHIV(donorRegistrationDto.isHasHIV())
-                    .build();
-
-            Address address = Address.builder()
-                    .country(donorRegistrationDto.getCountry())
-                    .state(donorRegistrationDto.getState())
-                    .district(donorRegistrationDto.getDistrict())
-                    .city(donorRegistrationDto.getCity())
-                    .streetAddress(donorRegistrationDto.getStreetAddress())
-                    .zipCode(donorRegistrationDto.getZipCode())
-                    .landmark(donorRegistrationDto.getLandmark())
-                    .build();
-            Set<Address> addresses = new HashSet<>();
-            addresses.add(address);
-            newDonor.setAddresses(addresses);
-
-            Donor registeredDonor = authenticationService.signUP(newDonor);
+            Donor registeredDonor = authenticationService.signUP(donorRegistrationDto);
             redirectAttributes.addFlashAttribute("email", registeredDonor.getEmail());
             redirectAttributes.addFlashAttribute("successMessage", "Verify your email: " + registeredDonor.getEmail());
             return RedirectionAndReturn.VERIFICATION_REDIRECTION;

@@ -5,6 +5,7 @@ import com.blood.bank.Blood.bank.Repository.DonorRepository;
 import com.blood.bank.Blood.bank.exception.DonorNotFoundException;
 import com.blood.bank.Blood.bank.model.Address;
 import com.blood.bank.Blood.bank.model.Donor;
+import com.blood.bank.Blood.bank.dto.DonorRegistrationDto;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import com.blood.bank.Blood.bank.dto.DonorRegistrationDto;
+import com.blood.bank.Blood.bank.mapper.DonorMapper;
 
 @Slf4j
 @Service
@@ -22,10 +25,12 @@ public class DonorService {
 
     private final DonorRepository donorRepository;
     private final AddressRepository addressRepository;
+    private final DonorMapper donorMapper;
 
-    public DonorService(DonorRepository donorRepository, AddressRepository addressRepository) {
+    public DonorService(DonorRepository donorRepository, AddressRepository addressRepository, DonorMapper donorMapper) {
         this.donorRepository = donorRepository;
         this.addressRepository = addressRepository;
+        this.donorMapper = donorMapper;
     }
 
     public List<Donor> findAll() {
@@ -142,23 +147,11 @@ public class DonorService {
     }
 
     @Transactional
-    public void updateDonor(Long id, Donor updatedDonorData) {
+    public void updateDonor(Long id, DonorRegistrationDto updatedDonorDto) {
         Donor existingDonor = donorRepository.findById(id)
                 .orElseThrow(() -> new DonorNotFoundException("Donor not found with id: " + id));
 
-        existingDonor.setFullName(updatedDonorData.getFullName());
-        existingDonor.setGender(updatedDonorData.getGender());
-        existingDonor.setDateOfBirth(updatedDonorData.getDateOfBirth());
-        existingDonor.setBloodGroup(updatedDonorData.getBloodGroup());
-        existingDonor.setPhoneNumber(updatedDonorData.getPhoneNumber());
-        existingDonor.setEmail(updatedDonorData.getEmail());
-        existingDonor.setOccupation(updatedDonorData.getOccupation());
-        existingDonor.setLastDonateDate(updatedDonorData.getLastDonateDate());
-        existingDonor.setHasDiseases(updatedDonorData.isHasDiseases());
-        existingDonor.setHasAllergies(updatedDonorData.isHasAllergies());
-        existingDonor.setHasCardiacConditions(updatedDonorData.isHasCardiacConditions());
-        existingDonor.setHasBleedingDisorders(updatedDonorData.isHasBleedingDisorders());
-        existingDonor.setHasHIV(updatedDonorData.isHasHIV());
+        donorMapper.updateDonorFromDto(updatedDonorDto, existingDonor);
 
         Address addressToUpdate;
         if (existingDonor.getAddresses().isEmpty()) {
@@ -169,20 +162,20 @@ public class DonorService {
             addressToUpdate = existingDonor.getAddresses().iterator().next();
         }
 
-        // Update address fields
-        if (!updatedDonorData.getAddresses().isEmpty()) {
-            Address newAddressData = updatedDonorData.getAddresses().iterator().next();
-            addressToUpdate.setCountry(newAddressData.getCountry());
-            addressToUpdate.setState(newAddressData.getState());
-            addressToUpdate.setDistrict(newAddressData.getDistrict());
-            addressToUpdate.setCity(newAddressData.getCity());
-            addressToUpdate.setStreetAddress(newAddressData.getStreetAddress());
-            addressToUpdate.setZipCode(newAddressData.getZipCode());
-            addressToUpdate.setLandmark(newAddressData.getLandmark());
-        }
+        addressToUpdate.setCountry(updatedDonorDto.getCountry());
+        addressToUpdate.setState(updatedDonorDto.getState());
+        addressToUpdate.setDistrict(updatedDonorDto.getDistrict());
+        addressToUpdate.setCity(updatedDonorDto.getCity());
+        addressToUpdate.setStreetAddress(updatedDonorDto.getStreetAddress());
+        addressToUpdate.setZipCode(updatedDonorDto.getZipCode());
+        addressToUpdate.setLandmark(updatedDonorDto.getLandmark());
 
         donorRepository.save(existingDonor);
         addressRepository.save(addressToUpdate);
+    }
+
+    public Optional<DonorRegistrationDto> getDonorDtoById(Long id) {
+        return donorRepository.findById(id).map(donorMapper::toDto);
     }
 
     public List<String> findDistinctCountries() {

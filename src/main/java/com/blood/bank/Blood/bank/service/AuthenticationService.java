@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import com.blood.bank.Blood.bank.Repository.DonorRepository;
 import com.blood.bank.Blood.bank.Repository.RoleRepository;
+import com.blood.bank.Blood.bank.dto.DonorRegistrationDto;
 import com.blood.bank.Blood.bank.dto.VerifyUserDto;
+import com.blood.bank.Blood.bank.mapper.DonorMapper;
 import com.blood.bank.Blood.bank.model.Donor;
 
 import jakarta.mail.MessagingException;
@@ -27,37 +29,40 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final AddressRepository addressRepository;
+    private final DonorMapper donorMapper;
 
     
 
     public AuthenticationService(DonorRepository userRepository, RoleRepository roleRepository,
-            PasswordEncoder passwordEncoder,EmailService emailService, AddressRepository addressRepository) {
+            PasswordEncoder passwordEncoder,EmailService emailService, AddressRepository addressRepository, DonorMapper donorMapper) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
         this.addressRepository = addressRepository;
+        this.donorMapper = donorMapper;
     }
 
     @Transactional
-    public Donor signUP(Donor input){
+    public Donor signUP(DonorRegistrationDto donorRegistrationDto){
+        Donor newDonor = donorMapper.toDonor(donorRegistrationDto);
      
         var userRole = roleRepository.findByName("ROLE_USER").orElseThrow(()-> new IllegalStateException("ROLE USER NOT FOUND"));
-        input.setPassword(passwordEncoder.encode(input.getPassword()));
-        input.setVerificationCode(generateVerificationCode());
-        input.setTime(LocalDateTime.now().plusMinutes(15));
-        input.setEnabled(false);
-        input.setRoles(Set.of(userRole));
+        newDonor.setPassword(passwordEncoder.encode(newDonor.getPassword()));
+        newDonor.setVerificationCode(generateVerificationCode());
+        newDonor.setTime(LocalDateTime.now().plusMinutes(15));
+        newDonor.setEnabled(false);
+        newDonor.setRoles(Set.of(userRole));
         
-        if (input.getAddresses() != null) {
-            for (Address address : input.getAddresses()) {
-                address.setDonor(input);
+        if (newDonor.getAddresses() != null) {
+            for (Address address : newDonor.getAddresses()) {
+                address.setDonor(newDonor);
             }
         }
 
-        Donor unVerifiedDonor = userRepository.save(input);
+        Donor unVerifiedDonor = userRepository.save(newDonor);
 
-        sendVerificationEmail(input);
+        sendVerificationEmail(newDonor);
 
         return unVerifiedDonor;
 

@@ -7,10 +7,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import com.blood.bank.Blood.bank.dto.DonorRegistrationDto;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.blood.bank.Blood.bank.model.Donor;
 import com.blood.bank.Blood.bank.service.DonorService;
+import com.blood.bank.Blood.bank.mapper.DonorMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,10 +23,12 @@ import java.util.Optional;
 public class AdminController {
 
     private final DonorService donorService;
+    private final DonorMapper donorMapper;
     private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
-    public AdminController(DonorService donorService) {
+    public AdminController(DonorService donorService, DonorMapper donorMapper) {
         this.donorService = donorService;
+        this.donorMapper = donorMapper;
     }
 
     // View all donors
@@ -60,7 +64,7 @@ public class AdminController {
     @GetMapping("/donors/{id}/edit")
     public String editDonor(@PathVariable Long id, Model model) {
         Donor donor = donorService.getDonorById(id).orElse(null);
-        model.addAttribute("donor", donor);
+        model.addAttribute("donor", donorMapper.toDto(donor));
         return "editdonor"; 
     }
 
@@ -68,7 +72,7 @@ public class AdminController {
     @PostMapping("/donors/{id}/edit")
     public String updateDonor(@PathVariable Long id, @ModelAttribute Donor updatedDonor, RedirectAttributes redirectAttributes) {
         try{
-            donorService.updateDonor(id, updatedDonor);
+            donorService.updateDonor(id, donorMapper.toDto(updatedDonor));
             redirectAttributes.addFlashAttribute("sMsg","Donor Updated Successfully");
         return RedirectionAndReturn.ADMIN_DASHBOARD_RED;
             
