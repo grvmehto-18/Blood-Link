@@ -4,7 +4,7 @@
             <div class="text-xl font-semibold text-gray-700">
                 <a href="/" class="flex items-center">
                     <img th:src="@{/images/hand-holding-a-drop-of-blood-world-blood-donor-day-blood-donation-illustration-donor-symbol-blood-donation-symbol-free-png.webp}" width="50" class="mr-2">
-                    <span class="text-red-500">Blood</span><span class="text-gray-700">Link</span>
+                    <small class="text-red-500">Blood</small><small class="text-gray-700">Link</small>
                 </a>
             </div>
             <div class="hidden md:flex items-center space-x-4">
@@ -34,12 +34,5 @@
             <a href="/blood/about" class="block py-2 px-4 text-sm text-gray-700 hover:bg-red-500 hover:text-white">About Us</a>
         </div>
     </nav>
-    <script>
-        const btn = document.querySelector("button.mobile-menu-button");
-        const menu = document.querySelector(".mobile-menu");
 
-        btn.addEventListener("click", () => {
-            menu.classList.toggle("hidden");
-        });
-    </script>
 </header>
