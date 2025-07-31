@@ -133,7 +133,7 @@
 
     <div>
         <label for="lastDonateDate" class="block text-sm font-medium text-gray-700">Last Donate Date:</label>
-        <input type="date" th:field="*{lastDonateDate}" id="lastDonateDate" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500">
+        <input type="date" th:field="*{lastDonateDate}" id="lastDonateDate" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500" th:errorclass="border-red-500">
         <small id="lastDonateDateError" class="text-red-500 text-xs italic"></small>
     </div>
 
