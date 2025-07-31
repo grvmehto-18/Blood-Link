@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.blood.bank</groupId>
-	<artifactId>Blood-Bank</artifactId>
+	<artifactId>Blood-Link</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Blood-Bank</name>
+	<name>Blood-Link</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
