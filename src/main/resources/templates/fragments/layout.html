@@ -8,8 +8,8 @@
     <link rel="stylesheet" th:href="@{/css/style.css?v=1.0}">
 </head>
 <body>
-    <div sec:authorize="!isAuthenticated()" th:replace="~{fragments/header :: header}"></div>
-    <div sec:authorize="isAuthenticated()" th:replace="~{fragments/logged_in_header :: logged_in_header}"></div>
+    <div sec:authorize="!isAuthenticated()" th:replace="~{fragments/new_header :: new_header}"></div>
+    <div sec:authorize="isAuthenticated()" th:replace="~{fragments/new_logged_in_header :: new_logged_in_header}"></div>
     <div th:replace="${content}"></div>
 </body>
 </html>

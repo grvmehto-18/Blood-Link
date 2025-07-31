@@ -1,0 +1,155 @@
+<header th:fragment="new_logged_in_header" class="sticky top-0 z-50 bg-gray-800 text-white shadow-lg">
+    <nav class="container mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+            <div class="text-2xl font-bold">
+                <a href="/" class="flex items-center text-white hover:text-gray-300">
+                    <img th:src="@{/images/hand-holding-a-drop-of-blood-world-blood-donor-day-blood-donation-illustration-donor-symbol-blood-donation-symbol-free-png.webp}" alt="BloodLink Logo" class="h-10 w-auto mr-2">
+                    <span class="text-red-500">Blood</span><span>Link</span>
+                </a>
+            </div>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="/" class="hover:text-gray-300 transition duration-300">Home</a>
+
+                <!-- Admin Links -->
+                <div sec:authorize="hasRole('ADMIN')" class="relative group">
+                    <button class="hover:text-gray-300 focus:outline-none transition duration-300">Manage</button>
+                    <ul class="absolute hidden bg-gray-700 rounded-md shadow-lg mt-2 py-1 w-48 right-0">
+                        <li><a th:href="@{/admin/dashboard}" class="block px-4 py-2 text-sm hover:bg-gray-600">Manage Donors</a></li>
+                        <li><a th:href="@{/requests/all}" class="block px-4 py-2 text-sm hover:bg-gray-600">View Blood Requests</a></li>
+                        <li><a th:href="@{/inventory/list}" class="block px-4 py-2 text-sm hover:bg-gray-600">Manage Inventory</a></li>
+                        <li><a th:href="@{/bloodcamps/list}" class="block px-4 py-2 text-sm hover:bg-gray-600">Manage Blood Camps</a></li>
+                    </ul>
+                </div>
+
+                <!-- Donor Links -->
+                <div sec:authorize="hasAnyRole('DONOR', 'ADMIN')" class="relative group">
+                    <button class="hover:text-gray-300 focus:outline-none transition duration-300">Dashboard</button>
+                    <ul class="absolute hidden bg-gray-700 rounded-md shadow-lg mt-2 py-1 w-48 right-0">
+                        <li><a th:href="@{/donor/dashboard}" class="block px-4 py-2 text-sm hover:bg-gray-600">My Profile</a></li>
+                        <li><a th:href="@{/donor/{id}/update(id=${#authentication.principal.id})}" class="block px-4 py-2 text-sm hover:bg-gray-600">Update Details</a></li>
+                    </ul>
+                </div>
+                <div sec:authorize="hasAnyRole('DONOR','ADMIN')" class="relative group">
+                    <button class="hover:text-gray-300 focus:outline-none transition duration-300">Activity</button>
+                    <ul class="absolute hidden bg-gray-700 rounded-md shadow-lg mt-2 py-1 w-48 right-0">
+                        <li><a th:href="@{/requests/new}" class="block px-4 py-2 text-sm hover:bg-gray-600">Make a Blood Request</a></li>
+                        <li><a th:href="@{/requests/my-requests}" class="block px-4 py-2 text-sm hover:bg-gray-600">View My Requests</a></li>
+                        <li><a th:href="@{/donations/history/{id}(id=${#authentication.principal.id})}" class="block px-4 py-2 text-sm hover:bg-gray-600">View Donation History</a></li>
+                    </ul>
+                </div>
+                <a sec:authorize="hasAnyRole('DONOR','ADMIN')" th:href="@{/search/searchPage}" class="hover:text-gray-300 transition duration-300">Search Donors</a>
+                <a sec:authorize="hasAnyRole('DONOR','ADMIN')" th:href="@{/bloodcamps/list}" class="hover:text-gray-300 transition duration-300">View Blood Camps</a>
+
+                <a href="/logout" class="hover:text-gray-300 transition duration-300">Logout</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden flex items-center">
+                <button id="mobile-menu-button-loggedin" class="outline-none">
+                    <svg class="w-6 h-6 hover:text-gray-300" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+                        <path d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+<div id="mobile-menu-loggedin" class="fixed inset-0 bg-gray-800 bg-opacity-90 z-50 transform translate-x-full transition-transform duration-300 ease-in-out md:hidden">
+    <div class="flex justify-end p-4">
+        <button id="close-menu-button-loggedin" class="text-white text-3xl">&times;</button>
+    </div>
+    <div class="flex flex-col p-6 space-y-4">
+        <a href="/" class="text-white text-lg py-2">Home</a>
+
+        <!-- Admin Accordion -->
+        <div sec:authorize="hasRole('ADMIN')" class="accordion-item">
+            <button class="accordion-header flex justify-between items-center w-full text-white text-lg py-2">
+                <span>Manage</span>
+                <svg class="w-4 h-4 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="accordion-content hidden pl-4 pt-2 space-y-2">
+                <a th:href="@{/admin/dashboard}" class="block text-gray-300 hover:text-white">Manage Donors</a>
+                <a th:href="@{/requests/all}" class="block text-gray-300 hover:text-white">View Blood Requests</a>
+                <a th:href="@{/inventory/list}" class="block text-gray-300 hover:text-white">Manage Inventory</a>
+                <a th:href="@{/bloodcamps/list}" class="block text-gray-300 hover:text-white">Manage Blood Camps</a>
+            </div>
+        </div>
+
+        <!-- Donor Accordion -->
+        <div sec:authorize="hasAnyRole('DONOR', 'ADMIN')" class="accordion-item">
+            <button class="accordion-header flex justify-between items-center w-full text-white text-lg py-2">
+                <span>Dashboard</span>
+                <svg class="w-4 h-4 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="accordion-content hidden pl-4 pt-2 space-y-2">
+                <a th:href="@{/donor/dashboard}" class="block text-gray-300 hover:text-white">My Profile</a>
+                <a th:href="@{/donor/{id}/update(id=${#authentication.principal.id})}" class="block text-gray-300 hover:text-white">Update Details</a>
+            </div>
+        </div>
+        <div sec:authorize="hasAnyRole('DONOR','ADMIN')" class="accordion-item">
+            <button class="accordion-header flex justify-between items-center w-full text-white text-lg py-2">
+                <span>Activity</span>
+                <svg class="w-4 h-4 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </button>
+            <div class="accordion-content hidden pl-4 pt-2 space-y-2">
+                <a th:href="@{/requests/new}" class="block text-gray-300 hover:text-white">Make a Blood Request</a>
+                <a th:href="@{/requests/my-requests}" class="block text-gray-300 hover:text-white">View My Requests</a>
+                <a th:href="@{/donations/history/{id}(id=${#authentication.principal.id})}" class="block text-gray-300 hover:text-white">View Donation History</a>
+            </div>
+        </div>
+
+        <a sec:authorize="hasAnyRole('DONOR','ADMIN')" th:href="@{/search/searchPage}" class="text-white text-lg py-2">Search Donors</a>
+        <a sec:authorize="hasAnyRole('DONOR','ADMIN')" th:href="@{/bloodcamps/list}" class="text-white text-lg py-2">View Blood Camps</a>
+        <a href="/logout" class="text-white text-lg py-2">Logout</a>
+    </div>
+</div>
+    </nav>
+    <script>
+        const mobileMenuButtonLoggedIn = document.getElementById('mobile-menu-button-loggedin');
+        const mobileMenuLoggedIn = document.getElementById('mobile-menu-loggedin');
+        const closeMenuButtonLoggedIn = document.getElementById('close-menu-button-loggedin');
+
+        if (mobileMenuButtonLoggedIn) {
+            mobileMenuButtonLoggedIn.addEventListener('click', () => {
+                mobileMenuLoggedIn.classList.remove('translate-x-full');
+            });
+        }
+
+        if (closeMenuButtonLoggedIn) {
+            closeMenuButtonLoggedIn.addEventListener('click', () => {
+                mobileMenuLoggedIn.classList.add('translate-x-full');
+            });
+        }
+
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                const icon = header.querySelector('svg');
+                content.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+            });
+        });
+
+        document.querySelectorAll('.relative.group').forEach(group => {
+            let timeout;
+            const dropdown = group.querySelector('ul');
+
+            group.addEventListener('mouseenter', () => {
+                clearTimeout(timeout);
+                if (dropdown) {
+                    dropdown.classList.remove('hidden');
+                }
+            });
+
+            group.addEventListener('mouseleave', () => {
+                timeout = setTimeout(() => {
+                    if (dropdown) {
+                        dropdown.classList.add('hidden');
+                    }
+                }, 200);
+            });
+        });
+    </script>
+</header>
