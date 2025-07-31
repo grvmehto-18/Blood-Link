@@ -19,9 +19,9 @@ FROM openjdk:21-jdk-slim
 WORKDIR /app
 
 # Copy the built JAR file from the previous stage
-COPY --from=build /app/target/Blood-Bank-0.0.1-SNAPSHOT.jar .
+COPY --from=build /app/target/Blood-Link-0.0.1-SNAPSHOT.jar .
 
 # Expose the port
 EXPOSE 8081
 # Run the Spring Boot appjar
-CMD ["java", "-jar", "Blood-Bank-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "Blood-Link-0.0.1-SNAPSHOT.jar"]

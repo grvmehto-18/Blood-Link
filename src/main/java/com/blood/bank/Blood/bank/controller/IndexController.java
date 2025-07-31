@@ -1,5 +1,6 @@
 package com.blood.bank.Blood.bank.controller;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -15,4 +16,7 @@ public class IndexController {
     public String loginPage(){
         return "login";
     }
+
+    @GetMapping("/health")
+    public ResponseEntity<String> healthCheck() { return ResponseEntity.ok("OK"); }
 }
