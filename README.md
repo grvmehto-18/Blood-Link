@@ -67,44 +67,55 @@ Follow these instructions to get a local copy of the project up and running for 
 * An IDE like IntelliJ IDEA or VS Code
 * **Docker** (Optional, for containerized deployment)
 
-### 1. Clone the Repository
+## 1. Clone the Repository
 
 ```bash
 git clone [https://github.com/grvmehto-18/blood-link.git](https://github.com/grvmehto-18/blood-link.git)
 cd grvmehto-18-blood-link
+```
+## 2. Configure application.properties
 
-### 2. application.properties
-
-# Database Configuration
+### Database Configuration
+```bash
 spring.datasource.url=jdbc:mysql://localhost:3306/blood_bank_db
 spring.datasource.username=your_db_user
 spring.datasource.password=your_db_password
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
+```
 
-# Email Configuration
+### Email Configuration
+```bash
 spring.mail.host=smtp.gmail.com
 spring.mail.port=587
 spring.mail.username=your_email@gmail.com
 spring.mail.password=your_app_password # Use an App Password for Gmail
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
+```
 
-### Build and Run
+## 3. Build and Run
 
-# Build the project and run tests
+### Build the project and run tests 
+```bash
 mvn clean install
+```
 
-# Run the application
+### Run the application ###
+```bash
 mvn spring-boot:run
+```
 
 ### Docker
 
-# Build the Docker image
+### Build the Docker image
+```bash
 docker build -t blood-link .
+```
 
-# Run the application in a Docker container
-# Make sure to pass your application properties as environment variables
+* Run the application in a Docker container 
+* Make sure to pass your application properties as environment variables
+```bash
 docker run -p 8081:8081 \
   -e SPRING_DATASOURCE_URL=jdbc:mysql://<your-db-host>:3306/blood_bank_db \
   -e SPRING_DATASOURCE_USERNAME=<your-db-user> \
@@ -112,3 +123,4 @@ docker run -p 8081:8081 \
   -e SPRING_MAIL_USERNAME=<your-email> \
   -e SPRING_MAIL_PASSWORD=<your-password> \
   blood-link
+```
