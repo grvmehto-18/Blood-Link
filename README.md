@@ -1,4 +1,4 @@
-# Blood-Link: Blood Bank Management System 🩸
+# Blood-Link🩸
 
 ![Java](https://img.shields.io/badge/Java-21-blue?style=for-the-badge&logo=openjdk)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-6DB33F?style=for-the-badge&logo=spring)
